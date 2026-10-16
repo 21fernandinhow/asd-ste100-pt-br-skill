@@ -13,9 +13,9 @@ Estes exemplos ilustram regras reais da ASD-STE100, adaptadas para o português.
 | Verbo, não substantivo | "Realize uma inspeção do filtro." | "Inspecione o filtro." | O substantivo esconde a ação e acrescenta um verbo-suporte sem significado. |
 | Sem gerundismo | "Vamos estar enviando o técnico." | "Vamos enviar o técnico." | "Ir + estar + gerúndio" não acrescenta informação e deixa o tempo da ação vago. |
 
-## Parte 2: aplicado à saída de agentes
+## Parte 2: aplicado a textos gerados por IA
 
-Estes são exemplos originais, criados para o uso real desta skill: reescrever a saída de um agente de IA para que outro agente, uma camada de tradução ou um leitor não nativo consiga interpretar o texto sem ambiguidade. Os exemplos são ilustrações, e não citações de um sistema real.
+Estes são exemplos originais, criados para o uso desta skill: reescrever texto gerado por IA para que uma pessoa consiga ler o texto sem ambiguidade e sem ruído. Os exemplos são ilustrações, e não citações de um sistema real.
 
 As contagens de palavras abaixo usam tokens separados por espaço (`text.split()`), sem contar a pontuação separadamente. Outro tokenizador vai dar outro número.
 
@@ -111,4 +111,29 @@ Atenção: "o script" é um agente que o original em inglês não nomeia. Se o a
 
 ## Como ler estes exemplos
 
-A Parte 1 mostra as regras em que a skill se baseia, já adaptadas ao português. A Parte 2 mostra a transferência: a mesma disciplina (um significado por palavra, voz ativa, tempo simples, uma instrução por frase, condições explícitas em vez de orações subordinadas escondidas) deixa o texto entre máquinas, e entre idiomas, mais seguro para interpretar, e não só manuais de aeronaves.
+A Parte 1 mostra as regras em que a skill se baseia, já adaptadas ao português. A Parte 2 mostra a transferência: a mesma disciplina (um significado por palavra, voz ativa, tempo simples, uma instrução por frase, condições explícitas em vez de orações subordinadas escondidas) deixa qualquer texto gerado por IA mais fácil de ler, e não só manuais de aeronaves. A Parte 3 mostra o que a STE não cobre: o ruído típico de uma resposta de IA.
+
+## Parte 3: ruído de resposta de IA
+
+### Exemplo: resposta de conversa
+
+**Antes**
+
+> Ótima pergunta! 😊 Vou te explicar de forma detalhada. Basicamente, o comando `git rebase` é uma ferramenta poderosa que permite reescrever o histórico de commits. Existem várias formas de usar o rebase, como o rebase interativo, o rebase com `--onto` e o rebase automático no `git pull`. Para o seu caso, você vai estar usando `git rebase main` estando na sua branch. Lembre-se de sempre fazer backup antes de operações que alteram o histórico!
+>
+> **Resumindo:** use `git rebase main` na sua branch.
+>
+> Se tiver mais alguma dúvida, é só falar!
+
+**Depois**
+
+> Na sua branch, rode `git rebase main`. O comando reaplica seus commits sobre a versão atual da `main`.
+
+**O que saiu**
+
+- Introdução vazia e emoji ("Ótima pergunta! 😊", "Vou te explicar de forma detalhada").
+- Adjetivo de marketing ("ferramenta poderosa").
+- Informação não pedida (os outros tipos de rebase).
+- Gerundismo ("vai estar usando").
+- Aviso genérico ("Lembre-se de sempre fazer backup"). Se o leitor precisa de um cuidado específico, por exemplo não usar rebase numa branch que outras pessoas já baixaram, diga esse cuidado. Um aviso genérico não muda o que o leitor faz.
+- Resumo que repete a resposta e oferta genérica no fim.

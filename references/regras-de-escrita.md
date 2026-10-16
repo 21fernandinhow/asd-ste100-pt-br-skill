@@ -57,15 +57,17 @@ A ASD-STE100 só define o inglês. Não existe norma oficial equivalente para o 
 | Present perfect | Evitar pretérito perfeito composto ("tem feito") e mais-que-perfeito composto ("tinha feito") | O pretérito perfeito composto em português indica ação repetida ou contínua, e não ação concluída. Traduções do inglês erram aqui com frequência. |
 | Formas em "-ing" | Proibição do gerundismo ("vou estar enviando") | É o uso do gerúndio que mais gera ruído em português. O gerúndio em si é permitido ("o processo está rodando"). "Pode estar rodando" é modalidade e também é permitido. |
 | Noun clusters (3 palavras) | Limite de 3 substantivos ligados por "de/da/do" | O português não empilha substantivos como o inglês. O equivalente é a cadeia de complementos com "de". |
-| Omissão de partes da frase | Inclui o sujeito oculto ambíguo | O português permite sujeito oculto. Em instruções para agentes, o sujeito oculto pode deixar dúvida sobre quem age. |
+| Omissão de partes da frase | Inclui o sujeito oculto ambíguo | O português permite sujeito oculto. Em instruções, o sujeito oculto pode deixar dúvida sobre quem age. |
 | Um significado por palavra | Inclui "deve" (obrigação ou probabilidade) e "pode" (permissão ou possibilidade) | São as duas palavras de modalidade mais ambíguas do português técnico. A skill sinaliza a dúvida em vez de escolher um sentido. |
 | (sem equivalente) | Proibição de "o mesmo" como pronome e cuidado com o possessivo "seu" | Problemas próprios do português: "o mesmo" burocrático e "seu" que pode se referir a "você" ou a uma terceira pessoa. |
 | (sem equivalente) | Uma forma de imperativo por documento | Procedimentos em português alternam imperativo ("Abra") e infinitivo ("Abrir"). A mistura parece mudança de tipo de instrução. |
 | Limites de 20 e 25 palavras | Mantidos | Um texto em português costuma ter mais palavras que o mesmo texto em inglês, por causa de artigos e preposições. O limite fica, portanto, um pouco mais exigente. O projeto preferiu manter os números da norma a inventar números novos. |
 
-## Por que esta skill usa a STE para saída de agentes
+## Por que esta skill usa a STE para respostas de IA
 
-A STE foi criada para eliminar a ambiguidade para um leitor que não pode fazer uma pergunta de volta: um técnico na pista, com um manual na mão e sem o autor por perto. Um agente de IA que lê a saída de outro agente, a descrição de uma ferramenta ou uma mensagem de sistema está na mesma posição. Ele não tem como perguntar se uma frase na voz passiva quer dizer que quem chama faz X ou que quem é chamado faz X. As mesmas regras que protegem um mecânico de ler errado um valor de torque protegem um agente de ler errado uma instrução.
+A STE foi criada para eliminar a ambiguidade para um leitor que não pode fazer uma pergunta de volta: um técnico na pista, com um manual na mão e sem o autor por perto. Quem lê uma resposta de IA está numa posição parecida. A pessoa quer entender a resposta na primeira leitura, sem precisar perguntar o que uma frase ambígua quer dizer. As mesmas regras que protegem um mecânico de ler errado um valor de torque protegem o leitor de ler errado uma resposta.
+
+A STE não trata do ruído típico de conversa com IA (introduções vazias, resumos repetidos, ofertas genéricas, formatação decorativa, informação não pedida), porque a norma foi feita para manuais. Por isso, a skill acrescenta a seção "Ruído de IA". Essa seção é uma regra deste projeto, e não da norma.
 
 ## Fontes
 

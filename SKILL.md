@@ -1,23 +1,23 @@
 ---
 name: asd-ste100-pt-br
-description: "Use quando um texto em português precisa ser lido sem um humano para resolver ambiguidades (descrições de ferramentas, mensagens de erro, instruções entre agentes, prompts de sistema, relatórios de status) e uma leitura errada tem custo real, ou quando o texto está denso, cheio de rodeios ou fácil de interpretar mal. Gatilhos: desambiguar, reescrever em STE, português técnico simplificado, linguagem simples, linguagem controlada, reescrever para um agente não interpretar errado. Não serve para texto criativo ou de marketing."
-version: 0.1.0
+description: "Use ao escrever respostas em português para o usuário ou ao reescrever texto de IA para ele ler: tira ruído, enrolação, excesso de informação e vícios de linguagem. Gatilhos: simplificar, deixar legível, sem enrolação, STE."
+version: 0.2.0
 ---
 
 # Português Técnico Simplificado (adaptação da ASD-STE100)
 
 A ASD-STE100 (Simplified Technical English) é uma norma de linguagem controlada criada pela indústria aeroespacial e de defesa (ASD, AeroSpace and Defence Industries Association of Europe). O objetivo da norma é impedir que técnicos de manutenção interpretem mal instruções em inglês. A norma remove as duas maiores fontes de erro de leitura: palavras com mais de um significado e frases com mais de uma estrutura possível.
 
-Esta skill aplica a mesma disciplina ao **português do Brasil**, para um leitor diferente: um **agente de IA ou sistema automático** que precisa interpretar um texto (uma mensagem de erro, a descrição de uma ferramenta, uma instrução entre agentes, um relatório de status) sem um humano por perto para resolver a ambiguidade.
+Esta skill aplica a mesma disciplina ao **português do Brasil**, para um leitor diferente: **uma pessoa que lê a resposta de uma IA**. Respostas de IA costumam vir com ruído: introduções vazias, resumos do que já foi dito, informação que ninguém pediu, rodeios empilhados e vícios de linguagem repetidos. O leitor gasta tempo para achar a resposta e se cansa no caminho. O objetivo desta skill é entregar a resposta de forma direta, sem ambiguidade e sem ruído.
 
 **Aviso importante:** a ASD-STE100 define somente o inglês. Esta skill é uma adaptação *inspirada* na norma. Ela não é uma norma oficial, e a ASD não a certifica nem a endossa. Várias regras abaixo não existem na STE original porque tratam de problemas próprios do português (gerundismo, "o mesmo" como pronome, o "deve" ambíguo, o pretérito perfeito composto).
 
 ## Quando usar
 
-- A saída de um agente (explicação, instrução, log, descrição de ferramenta) está densa, cheia de jargão ou ambígua.
-- O texto vai ser lido por outro agente, por um pipeline de tradução ou por um leitor que não domina o português, e uma leitura errada tem custo.
-- Você está escrevendo um prompt, uma mensagem de sistema ou a descrição de uma ferramenta e quer remover a ambiguidade antes que um modelo leia o texto.
-- Você quer uma comparação **antes/depois** que mostre qual regra foi violada e como a reescrita corrige o problema. Peça explicitamente. A saída padrão é só o texto reescrito (veja Formato de saída).
+- **Você está escrevendo uma resposta em português para o usuário.** Aplique as regras enquanto escreve. Não anuncie a skill e não descreva as regras. Entregue a resposta já limpa.
+- O usuário cola um texto gerado por IA (explicação, resumo, instrução, relatório) e pede para deixar o texto mais simples, mais curto ou mais legível.
+- O texto está denso, cheio de jargão, cheio de rodeios ou fácil de interpretar mal.
+- O usuário pede uma comparação **antes/depois** que mostre qual regra foi violada e como a reescrita corrige o problema. A saída padrão é só o texto reescrito (veja Formato de saída).
 
 Não use esta skill em texto criativo ou de marketing. O estilo STE é propositalmente seco e literal. Não aplique a skill quando voz, nuance ou persuasão são o objetivo do texto.
 
@@ -25,9 +25,9 @@ Não use esta skill em texto criativo ou de marketing. O estilo STE é proposita
 
 Escolha um modo antes de reescrever. Se o usuário não disser qual, deduza pelo tipo de texto. Não anuncie o modo, a menos que o usuário peça a tabela de regras.
 
-**Estrito**: procedimentos, mensagens de erro, descrições de ferramentas e funções, instruções entre agentes, textos de segurança. Use este modo sempre que uma leitura errada tem custo. Aplique todas as regras abaixo, incluindo os limites de tamanho e a disciplina de "uma palavra, um significado".
+**Estrito**: procedimentos, passo a passo, mensagens de erro, textos de segurança. Use este modo sempre que uma leitura errada tem custo. Aplique todas as regras abaixo, incluindo os limites de tamanho e a disciplina de "uma palavra, um significado".
 
-**Estilo STE**: READMEs, descrições de PR, changelogs, prosa explicativa. Aplique as regras estruturais por completo e trate as regras lexicais como recomendação. Na prática: mantenha os limites de tamanho, a voz ativa, os tempos simples, a proibição do ponto e vírgula, do gerundismo, da nominalização e dos adjetivos de marketing. Não imponha um único termo fixo para cada conceito. Prosa precisa de alguma variação. Uma reescrita estrita de prosa parece um transplante de personalidade, e não um esclarecimento.
+**Estilo STE**: respostas de conversa, explicações, resumos, READMEs, descrições de PR, changelogs. Este é o modo padrão para respostas ao usuário. Aplique as regras estruturais por completo e trate as regras lexicais como recomendação. Na prática: mantenha os limites de tamanho, a voz ativa, os tempos simples, a proibição do ponto e vírgula, do gerundismo, da nominalização e dos adjetivos de marketing. Não imponha um único termo fixo para cada conceito. Prosa precisa de alguma variação. Uma reescrita estrita de prosa parece um transplante de personalidade, e não um esclarecimento.
 
 ## Fonte e escopo
 
@@ -53,7 +53,7 @@ Aplique as regras estruturais com confiança. Trate as regras lexicais como uma 
 | Tamanho da frase | No máximo 20 palavras em instruções e procedimentos, 25 em descrições | Frases longas com várias orações subordinadas |
 | Sem ponto e vírgula (Regra 8.1) | Divida em frases separadas | Qualquer ponto e vírgula. A STE proíbe o sinal por completo. O travessão é permitido, mas muitas vezes indica uma frase que deveria ser dividida. |
 | Cadeias de "de" | No máximo 3 substantivos ligados ("válvula da bomba de combustível") | 4 ou mais ("válvula de entrada da bomba de combustível de alta pressão"). É o equivalente em português dos "noun clusters" do inglês. |
-| Sem elipse nem sujeito oculto ambíguo | Mantenha sujeito, verbo e artigo explícitos quando houver dúvida sobre quem age. "Quando o servidor recebe a resposta, o cliente valida o token." | "Ao receber a resposta, valida o token." Quem recebe? Quem valida? O português permite sujeito oculto, mas um leitor automático não tem como recuperar o sujeito. |
+| Sem elipse nem sujeito oculto ambíguo | Mantenha sujeito, verbo e artigo explícitos quando houver dúvida sobre quem age. "Quando o servidor recebe a resposta, o cliente valida o token." | "Ao receber a resposta, valida o token." Quem recebe? Quem valida? O português permite sujeito oculto, mas o leitor não tem como perguntar quem age. |
 | Sem "o mesmo" como pronome | "Feche o arquivo e salve o arquivo." ou "Feche e salve o arquivo." | "Feche o arquivo e salve o mesmo." "O mesmo" como pronome é burocrático e às vezes ambíguo. Repita o substantivo ou use "ele/ela". |
 | Possessivo sem ambiguidade | "O cliente envia o token do servidor." / "...o token dele." | "O cliente envia ao servidor o seu token." "Seu" pode ser do cliente, do servidor ou de "você". |
 | Manter a modalidade | "A requisição **pode ter falhado**." continua "pode ter falhado". | Transformar um "talvez" em fato ("A requisição falhou.") ou criar uma certeza que o original não tinha. |
@@ -86,7 +86,7 @@ Evite os tempos compostos:
 
 ## Checklist de varredura
 
-Estes oito hábitos explicam a maior parte do que torna um texto em português gerado por máquina difícil de interpretar. Cada um é mecânico: você consegue apontar a palavra ou o sinal exato que quebra a regra. Procure os oito antes de reescrever.
+Estes oito hábitos explicam a maior parte do que torna um texto em português gerado por IA difícil de ler. Cada um é mecânico: você consegue apontar a palavra ou o sinal exato que quebra a regra. Procure os oito antes de reescrever.
 
 1. **Rotação de sinônimos**: a mesma coisa recebe vários nomes no documento ("o usuário", "o cliente", "o solicitante"). O leitor não sabe se é uma coisa ou três. Correção: escolha um nome e use sempre esse nome.
 2. **Rodeios empilhados**: verbos auxiliares e qualificadores se acumulam até a frase não afirmar nada ("é importante ressaltar que isso pode eventualmente ajudar a melhorar"). Correção: afirme a ideia ou exclua a frase.
@@ -97,11 +97,27 @@ Estes oito hábitos explicam a maior parte do que torna um texto em português g
 7. **"O mesmo" como pronome**: "salve o mesmo", "a mesma deve ser preenchida". Correção: repita o substantivo ou use "ele/ela".
 8. **Gíria corporativa e estrangeirismo desnecessário**: dar um start, dar um ping, fazer um follow-up, startar, performar, alavancar, endereçar. Correção: use o verbo simples em português (iniciar, contatar, acompanhar, executar, aumentar, resolver).
 
+## Ruído de IA
+
+Estes hábitos não criam ambiguidade, mas cansam o leitor e escondem a resposta. Remova todos.
+
+1. **Introdução vazia**: "Ótima pergunta!", "Claro! Vou te ajudar com isso.", "Vamos lá:". Correção: comece pela resposta.
+2. **Repetir a pergunta**: "Você quer saber como configurar X. Para configurar X...". Correção: responda direto.
+3. **Resumo do que acabou de ser dito**: "Em resumo...", "Resumindo:" no fim de uma resposta curta. Correção: exclua. Use um resumo só em textos longos, e só se ele acrescentar uma visão que o texto não deu.
+4. **Oferta genérica no fim**: "Se quiser, posso ajudar com mais alguma coisa!", "Fico à disposição." Correção: exclua. Mantenha uma oferta só quando ela é um próximo passo concreto e útil.
+5. **Informação não pedida**: contexto histórico, alternativas que você não recomenda, avisos genéricos ("lembre-se de sempre fazer backup"). Correção: entregue o que o leitor pediu. Acrescente um aviso só quando ele muda o que o leitor vai fazer.
+6. **Formatação decorativa**: títulos em resposta de três parágrafos, negrito em metade das palavras, lista de itens que é uma frase só, emojis. Correção: use prosa simples. Use títulos, listas e tabelas só quando o conteúdo tem essa estrutura de verdade.
+7. **Narração do processo**: "Primeiro vou analisar... Agora vou verificar... Pronto, analisei e...". Correção: entregue o resultado. Mostre o processo só quando o leitor precisa dele para confiar no resultado.
+8. **Elogio e entusiasmo artificial**: "Excelente ideia!", "Isso é muito interessante!". Correção: exclua.
+9. **Resposta longa para pergunta curta**: Correção: uma pergunta simples recebe de uma a três frases.
+
+A regra geral: **a primeira frase responde à pergunta**. Todo o resto precisa justificar o espaço que ocupa.
+
 ## Processo
 
 1. Escolha o modo (Estrito ou Estilo STE). Diga qual modo só quando o usuário pedir a tabela de regras.
 2. Leia o texto uma vez para entender o sentido. Não comece a reescrever antes de saber o que o texto ainda precisa dizer depois.
-3. Leia frase por frase. Marque toda violação das tabelas de Regras principais e todo hábito do Checklist. No modo Estilo STE, marque as regras lexicais, mas não imponha essas regras. Para uma primeira passada mecânica nas regras estruturais, rode `scripts/ste-lint-pt.py` (aceita stdin ou arquivos, e `--json` para saída estruturada). O linter verifica ponto e vírgula, tamanho de frase, gerundismo, gíria corporativa, nominalização com verbo-suporte, adjetivos de marketing, rotação de sinônimos, conjunção solta no fim de itens de lista, "o mesmo" como pronome, voz passiva e tempos compostos. Por projeto, ele nunca marca rodeios nem modalidade. `--baseline N` tolera N violações graves (útil para adotar em documentos existentes). `--disable regra1,regra2` silencia regras.
+3. Leia frase por frase. Marque toda violação das tabelas de Regras principais, todo hábito do Checklist e todo item de Ruído de IA. No modo Estilo STE, marque as regras lexicais, mas não imponha essas regras. Para uma primeira passada mecânica nas regras estruturais, rode `scripts/ste-lint-pt.py` (aceita stdin ou arquivos, e `--json` para saída estruturada). O linter verifica ponto e vírgula, tamanho de frase, gerundismo, gíria corporativa, nominalização com verbo-suporte, adjetivos de marketing, rotação de sinônimos, conjunção solta no fim de itens de lista, "o mesmo" como pronome, voz passiva e tempos compostos. Por projeto, ele nunca marca rodeios nem modalidade. `--baseline N` tolera N violações graves (útil para adotar em documentos existentes). `--disable regra1,regra2` silencia regras.
 4. Reescreva cada frase marcada para corrigir a violação e preservar exatamente o sentido original. Se a reescrita perder uma precisão necessária (uma condição de segurança, um limite de escopo, um número), mantenha a forma longa e sinalize em vez de simplificar sem avisar.
    - **Verifique a modalidade antes de fechar a reescrita.** Rodeios ("pode", "talvez", "às vezes", "provavelmente", "teria") carregam a confiança do autor, e a confiança é conteúdo. Uma frase mais curta que transforma uma suposição em fato não é uma simplificação. É uma afirmação diferente. Este é o erro mais comum de uma reescrita STE bem-intencionada, porque os limites de tamanho incentivam a cortar exatamente os rodeios.
    - Nunca acrescente um fato que o original não disse. Uma reescrita que fica melhor porque fornece uma causa, uma frequência ou um mecanismo deixou de ser reescrita.
@@ -110,7 +126,7 @@ Estes oito hábitos explicam a maior parte do que torna um texto em português g
 
 ## Formato de saída
 
-**Padrão: só o texto reescrito.** A maioria das pessoas quer um resultado para colar direto na descrição de uma ferramenta, numa mensagem de erro ou num prompt. Mostre o texto simplificado sozinho. Não acrescente introdução sobre a skill, anúncio de modo, contagem de violações, resumo das mudanças, tabela de regras nem oferta para explicar mais.
+**Padrão: só o texto reescrito.** A maioria das pessoas quer um resultado para ler ou colar direto. Mostre o texto simplificado sozinho. Não acrescente introdução sobre a skill, anúncio de modo, contagem de violações, resumo das mudanças, tabela de regras nem oferta para explicar mais.
 
 Única adição permitida: se o passo 4 manteve uma forma longa de propósito, acrescente uma linha depois do texto, começando com `Mantido:`, que nomeia o trecho e a precisão que seria perdida. Omita a linha quando não houver nada para informar.
 
@@ -132,6 +148,7 @@ Depois da tabela, escreva uma linha sobre o que você decidiu **não** simplific
 
 **A skill faz:**
 - Reescreve português ambíguo ou denso em frases curtas, com um só sentido e voz ativa.
+- Remove o ruído típico de IA: introduções, resumos repetidos, ofertas genéricas, formatação decorativa e informação que o leitor não pediu.
 - Entrega só o texto reescrito por padrão e nomeia as regras aplicadas quando o usuário pede.
 - Preserva todo fato, condição e limite de escopo do original.
 - Preserva a força de todo rodeio e não acrescenta nenhuma afirmação que o original não fez.
@@ -150,5 +167,5 @@ Depois da tabela, escreva uma linha sobre o que você decidiu **não** simplific
 ## Recursos adicionais
 
 - **`references/regras-de-escrita.md`**: resumo das 9 seções de regras da STE e da estrutura do dicionário, com fontes, mais as decisões de adaptação para o português.
-- **`examples/antes-depois.md`**: exemplos comentados, incluindo exemplos das regras da STE e exemplos de saída de agentes criados para esta skill.
+- **`examples/antes-depois.md`**: exemplos comentados, incluindo exemplos das regras da STE e exemplos de textos e respostas de IA criados para esta skill.
 - **`scripts/ste-lint-pt.py`**: linter determinístico, só com a biblioteca padrão do Python, para as regras estruturais. Inclui conjunção solta em itens de lista e verificação de rotação de sinônimos por arquivo. Termina com código 1 quando as violações graves passam do `--baseline` (padrão 0). Achados de recomendação (voz passiva, tempos compostos, "o mesmo") nunca falham a execução. `--disable` silencia regras pelo nome. Ele nunca marca rodeios nem modalidade: isso é conteúdo, não estilo, e o `--selftest` confirma que "pode ter falhado" passa sem alertas.

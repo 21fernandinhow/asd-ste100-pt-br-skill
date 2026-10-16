@@ -1,24 +1,25 @@
-# ASD-STE100 PT-BR: Português Técnico Simplificado para saída de agentes
+# ASD-STE100 PT-BR: Português Técnico Simplificado para respostas de IA
 
 Uma skill para Claude que reescreve português denso e ambíguo seguindo a disciplina da [ASD-STE100 Simplified Technical English](https://www.asd-ste100.org/) (STE), a norma de linguagem controlada que a indústria aeroespacial e de defesa criou para que instruções de manutenção de aeronaves não possam ser lidas de forma errada.
 
-A skill usa a mesma disciplina para outro leitor: um **agente de IA** que lê a saída de outro agente, a descrição de uma ferramenta, uma mensagem de erro ou uma instrução entre agentes, sem um humano por perto para resolver ambiguidades.
+A skill usa a mesma disciplina para outro leitor: **uma pessoa que lê a resposta de uma IA**. Respostas de IA costumam vir com ruído: introduções vazias, resumos do que já foi dito, informação que ninguém pediu, rodeios empilhados e vícios de linguagem repetidos. A skill entrega a resposta de forma direta, sem ambiguidade e sem ruído.
 
 Este projeto é uma adaptação para o português do Brasil da skill [danyuchn/asd-ste100-skill](https://github.com/danyuchn/asd-ste100-skill), de Dustin Yuchen Teng, publicada sob a licença MIT.
 
 > **Não é uma norma oficial.** A ASD-STE100 só define o inglês. As regras para o português são uma adaptação deste projeto. A ASD não certifica nem endossa este projeto.
 
-## Por que STE, e por que para agentes
+## Por que STE, e por que para respostas de IA
 
 A STE existe porque uma instrução mal interpretada em uma aeronave pode matar pessoas, e os leitores eram muitas vezes técnicos não nativos em inglês, sem um autor para tirar dúvidas. A solução da norma: um significado por palavra, voz ativa, tempos simples, uma instrução por frase, frases curtas, nenhuma palavra omitida.
 
-Um agente de IA que lê a saída de outro agente está em uma posição parecida. Ele não tem canal de volta e não pode perguntar "você quis dizer X ou Y?". As mesmas regras que impedem um mecânico de ler errado um valor de torque impedem um agente de ler errado uma descrição de ferramenta.
+Quem lê uma resposta de IA está em uma posição parecida. A resposta precisa ser entendida na primeira leitura, sem ida e volta para perguntar "você quis dizer X ou Y?". As mesmas regras que impedem um mecânico de ler errado um valor de torque deixam uma resposta de IA fácil de ler. A skill acrescenta uma lista de ruídos típicos de IA que a STE original não cobre, porque a norma foi feita para manuais, e não para conversas.
 
 ## Antes / depois
 
 | Antes | Depois |
 |---|---|
 | "Esta ferramenta vai estar tentando sincronizar o estado entre os diversos backends que tiverem sido configurados, e caso seja detectado um conflito ela poderá resolver o mesmo automaticamente dependendo da estratégia que estiver definida, ou do contrário irá sinalizar o conflito para revisão manual." | "A ferramenta tenta sincronizar o estado entre os backends configurados. Se a ferramenta encontra um conflito, ela lê a estratégia configurada. Se a estratégia permite resolução automática, a ferramenta pode resolver o conflito sem um usuário. Se a ferramenta não resolve o conflito, ela envia o conflito para revisão manual." |
+| "Ótima pergunta! Vou te explicar. Basicamente, o erro acontece porque a variável não foi inicializada. Em resumo, você precisa inicializar a variável antes de usar. Se quiser, posso ajudar com mais alguma coisa!" | "O erro acontece porque a variável não foi inicializada. Inicialize a variável antes de usar." |
 | "Pode ter ocorrido um erro durante o processamento da sua solicitação devido a uma possível incompatibilidade no formato de dados esperado, o que pode ser causado por uma versão desatualizada do cliente." | "Sua solicitação pode ter falhado. A causa pode ser um formato de dados diferente do formato que o servidor espera. Um cliente desatualizado pode causar essa diferença. Verifique a versão do seu cliente." |
 
 Mais exemplos em [`examples/antes-depois.md`](examples/antes-depois.md).
@@ -37,9 +38,9 @@ A tabela completa de decisões está em [`references/regras-de-escrita.md`](refe
 
 ## O que a skill faz
 
-1. Escolhe um modo. **Estrito** cobre procedimentos, mensagens de erro e descrições de ferramentas. **Estilo STE** cobre READMEs, descrições de PR e prosa explicativa. O Estilo STE mantém a disciplina das frases, mas não impõe um vocabulário fixo.
+1. Escolhe um modo. **Estrito** cobre procedimentos, passo a passo e mensagens de erro. **Estilo STE** cobre respostas de conversa, explicações, READMEs e descrições de PR, e é o modo padrão para responder ao usuário. O Estilo STE mantém a disciplina das frases, mas não impõe um vocabulário fixo.
 2. Lê o texto em português para entender o sentido.
-3. Marca cada violação, frase por frase.
+3. Marca cada violação e cada ruído de IA (introdução vazia, resumo repetido, oferta genérica, formatação decorativa, informação não pedida), frase por frase.
 4. Reescreve cada frase marcada sem perder nenhum fato, condição ou limite de escopo. Se uma forma mais curta perderia uma precisão necessária, a skill mantém a forma longa e sinaliza o conflito.
 5. Entrega só o texto reescrito, sem introdução, anúncio de modo ou resumo das mudanças, mais uma linha `Mantido:` quando deixou algo sem simplificar de propósito.
 
@@ -92,19 +93,21 @@ O clone em `~/.claude/skills/` deixa a skill disponível em todos os projetos do
 
 ## Uso
 
-Peça para simplificar ou esclarecer um texto em português:
+Com a skill instalada, o Claude aplica as regras quando escreve respostas em português para você. Você também pode pedir para simplificar um texto:
 
 ```
-Desambigue esta descrição de ferramenta
-Reescreva esta mensagem de erro para um agente não interpretar errado
-Aplique a STE100 a esta instrução
+Deixe esta resposta mais legível
+Tire a enrolação deste texto
+Aplique a STE100 a esta explicação
 ```
+
+Uma skill só carrega quando o Claude acha que ela combina com o pedido. Para garantir o estilo em todas as respostas, acrescente uma linha nas suas preferências do claude.ai ou no `~/.claude/CLAUDE.md`: *"Ao me responder em português, use sempre a skill asd-ste100-pt-br."*
 
 Você recebe só o texto reescrito. Para ver as regras aplicadas, acrescente "mostre o diff" ou "explique as mudanças".
 
 ## Escopo
 
-Feita para: mensagens entre agentes, descrições de ferramentas e funções, mensagens de erro, prompts de sistema, instruções entre agentes. Ou seja, qualquer texto em português que uma máquina ou um leitor não nativo precisa interpretar sem ninguém para perguntar.
+Feita para: respostas de IA em conversa, explicações, resumos, relatórios, mensagens de erro e instruções. Ou seja, qualquer texto em português que uma pessoa precisa ler e entender na primeira leitura.
 
 Não é para: texto criativo, de marketing ou qualquer texto em que voz e nuance são o objetivo. A STE é seca e literal de propósito.
 
